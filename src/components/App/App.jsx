@@ -20,21 +20,22 @@ export function App() {
     localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts])
 
-  const addContact = ({ name, number }) => {
+  const onSubmit = ({ name, number }) => {
 
     const contact = {
       id: shortid.generate(),
       name,
       number,
     };
-    setContacts(({ contacts }) => ({
-      contacts: [contact, ...contacts],
-    }));
+  
+    setContacts(prevState => [contact, ...prevState])
+    
+   
   };
 
   const deleteContact = (contactId) => {
     setContacts((prevState) => ({
-      contacts: prevState.contacts.filter(
+      contacts: prevState.filter(
         (contact) => contact.id !== contactId
       ),
     }));
@@ -59,7 +60,7 @@ export function App() {
 
   return (
     <Container>
-      <ContactsForm onSubmit={addContact} />
+      <ContactsForm onSubmit={onSubmit} />
       <h2>Contacts</h2>
       {contacts.length > 1 && <Filter onChange={changeFilter} />}
       {contacts.length ? (
