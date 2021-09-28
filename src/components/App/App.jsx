@@ -11,33 +11,33 @@ export function App() {
 
   useEffect(() => {
     const contacts = localStorage.getItem("contacts");
+    console.log("localStorage ", contacts)
     const parsedContacts = JSON.parse(contacts);
+    const parsedContactsInArray = Array.from(parsedContacts)
+    console.log("parsedContacts ", parsedContacts)
     if (parsedContacts) {
-      setContacts({ contacts: parsedContacts });
+      setContacts( parsedContactsInArray );
+ 
     }
   }, []);
   useEffect(() => {
     localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts])
+  }, [contacts]);
 
   const onSubmit = ({ name, number }) => {
-
     const contact = {
       id: shortid.generate(),
       name,
       number,
     };
-  
-    setContacts(prevState => [contact, ...prevState])
-    
-   
+
+    setContacts((prevState) => [contact, ...prevState]);
   };
 
   const deleteContact = (contactId) => {
+    console.log(contactId);
     setContacts((prevState) => ({
-      contacts: prevState.filter(
-        (contact) => contact.id !== contactId
-      ),
+      contacts: prevState.filter((contact) => contact.id !== contactId),
     }));
   };
 
