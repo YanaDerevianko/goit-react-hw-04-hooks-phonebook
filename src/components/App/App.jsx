@@ -11,10 +11,8 @@ export function App() {
 
   useEffect(() => {
     const contacts = localStorage.getItem("contacts");
-    console.log("localStorage ", contacts)
     const parsedContacts = JSON.parse(contacts);
     const parsedContactsInArray = Array.from(parsedContacts)
-    console.log("parsedContacts ", parsedContacts)
     if (parsedContacts) {
       setContacts( parsedContactsInArray );
  
@@ -30,30 +28,29 @@ export function App() {
       name,
       number,
     };
-
+    const foundEl = contacts.find(
+      (el) => el.name.toLowerCase() === name.toLowerCase()
+    );
+    if(foundEl){
+      alert(`${name} is already in your contacts!`)
+      return
+    }
     setContacts((prevState) => [contact, ...prevState]);
   };
 
   const deleteContact = (contactId) => {
-    console.log(contactId);
-    setContacts((prevState) => ({
-      contacts: prevState.filter((contact) => contact.id !== contactId),
-    }));
+    setContacts(prevState =>  prevState.filter((contact) => contact.id !== contactId));
   };
 
   const getVisibleContacts = () => {
     const normalizedFilter = filter.toLowerCase();
     if (contacts.length) {
-      return contacts.filter((contact) =>
-        contact.name.toLowerCase().includes(normalizedFilter)
+      return contacts.filter((contact) => contact.name.toLowerCase().includes(normalizedFilter)
       );
     }
   };
   const changeFilter = (e) => {
-    const { name, value } = e.target;
-    setFilter({
-      [name]: value,
-    });
+    setFilter(e.target.value);
   };
 
   const visibleContacts = getVisibleContacts();
